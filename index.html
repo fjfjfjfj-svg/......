@@ -1,0 +1,479 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE UNKNOWN ARCHIVE</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --gold: #d8c18a;
+    --muted: #85859c;
+    --panel: rgba(13, 15, 34, 0.82);
+    --border: rgba(216, 193, 138, 0.23);
+}
+
+body {
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: #f0eee8;
+    background:
+        radial-gradient(ellipse at 50% 0%, #20264a 0%, #0b0d1d 45%, #05060e 100%);
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+#stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0.5;
+    animation: twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(0.7); }
+    50% { opacity: 0.9; transform: scale(1.4); }
+}
+
+.shooting-star {
+    position: absolute;
+    width: 110px;
+    height: 1px;
+    background: linear-gradient(90deg, #ffffff, transparent);
+    opacity: 0;
+    transform: rotate(-35deg);
+    animation: shooting 7s linear infinite;
+}
+
+@keyframes shooting {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) rotate(-35deg);
+    }
+    5% { opacity: 0.8; }
+    16% {
+        opacity: 0;
+        transform: translate(-260px, 180px) rotate(-35deg);
+    }
+    100% { opacity: 0; }
+}
+
+main {
+    position: relative;
+    z-index: 1;
+    width: min(900px, 92%);
+    margin: auto;
+    padding: 65px 0 55px;
+}
+
+.topline {
+    text-align: center;
+    color: var(--gold);
+    letter-spacing: 5px;
+    font-size: 10px;
+    margin-bottom: 24px;
+    opacity: 0.85;
+}
+
+h1 {
+    text-align: center;
+    font-size: clamp(30px, 6vw, 53px);
+    font-weight: normal;
+    letter-spacing: 5px;
+    line-height: 1.2;
+    text-shadow: 0 0 35px rgba(174, 184, 255, 0.2);
+}
+
+.subtitle {
+    text-align: center;
+    margin-top: 17px;
+    color: #a4a5bc;
+    font-size: 14px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+}
+
+.divider {
+    width: 100px;
+    height: 1px;
+    margin: 34px auto;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.intro {
+    max-width: 610px;
+    margin: 0 auto 38px;
+    text-align: center;
+    color: #b9b9ca;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.section-label {
+    margin-bottom: 17px;
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-align: center;
+}
+
+.chapters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.chapter {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 195px;
+    padding: 25px 23px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--panel);
+    transition: border-color 0.4s, transform 0.4s, background 0.4s;
+}
+
+.chapter:hover {
+    border-color: rgba(216, 193, 138, 0.65);
+    transform: translateY(-3px);
+    background: rgba(24, 27, 52, 0.94);
+}
+
+.chapter::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 45px;
+    height: 1px;
+    background: var(--gold);
+}
+
+.chapter-number {
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin-bottom: 14px;
+}
+
+.chapter h2 {
+    font-size: 21px;
+    font-weight: normal;
+    line-height: 1.35;
+    margin-bottom: 10px;
+}
+
+.description {
+    color: #a1a2b8;
+    font-size: 13px;
+    line-height: 1.7;
+    flex-grow: 1;
+}
+
+.chapter-status {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-family: Arial, sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.6px;
+    color: var(--gold);
+}
+
+.chapter-status.locked {
+    color: #9292ad;
+}
+
+.countdown {
+    margin-top: 12px;
+    color: #e4d4a8;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+}
+
+.open-link {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 17px;
+    padding: 10px 15px;
+    border: 1px solid rgba(216,193,138,0.48);
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    transition: 0.3s;
+}
+
+.open-link:hover {
+    color: #080a14;
+    background: var(--gold);
+}
+
+.open-link[hidden] {
+    display: none;
+}
+
+.bottom-note {
+    margin-top: 39px;
+    text-align: center;
+    color: #686b86;
+    font-size: 12px;
+    line-height: 1.9;
+    letter-spacing: 0.5px;
+}
+
+footer {
+    margin-top: 25px;
+    text-align: center;
+    color: #484b64;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    letter-spacing: 3px;
+}
+
+@media (max-width: 600px) {
+    main {
+        padding-top: 43px;
+    }
+
+    h1 {
+        letter-spacing: 3px;
+    }
+
+    .chapters {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .chapter {
+        min-height: 175px;
+        padding: 22px;
+    }
+
+    .intro {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="stars"></div>
+
+<main>
+    <div class="topline">CLASSIFIED · UNKNOWN ORIGIN</div>
+
+    <h1>THE UNKNOWN<br>ARCHIVE</h1>
+
+    <p class="subtitle">
+        не каждая тайна хочет быть раскрытой
+        <br>
+        но у каждой истории есть причина
+    </p>
+
+    <div class="divider"></div>
+
+    <p class="intro">
+        Ты оказался здесь не просто так.
+        Перед тобой несколько фрагментов одной истории.
+        Каждый из них приближает к разгадке,
+        но некоторые двери открываются только в назначенный момент.
+    </p>
+
+    <div class="section-label">АРХИВ · СПИСОК ДЕЛ</div>
+
+    <section class="chapters">
+
+        <!-- ГЛАВА I -->
+        <article class="chapter">
+            <div class="chapter-number">FRAGMENT № 001</div>
+            <h2>Три звезды</h2>
+            <p class="description">
+                У каждой истории есть причина.
+                Иногда всё начинается с того,
+                что кажется случайностью.
+            </p>
+            <div class="chapter-status">● ДОСТУП ОТКРЫТ</div>
+            <a class="open-link"
+               href="https://fjfjfjfj-svg.github.io/three-starss/"
+               target="_blank" rel="noopener">
+                ОТКРЫТЬ ГЛАВУ ↗
+            </a>
+        </article>
+
+        <!-- ГЛАВА II -->
+        <article class="chapter" data-release="2026-10-29T18:00:00+05:00">
+            <div class="chapter-number">FRAGMENT № 002</div>
+            <h2>Секретный архив</h2>
+            <p class="description">
+                Некоторые детали не появляются случайно.
+                Внимательно изучи то, что уже известно.
+            </p>
+            <div class="chapter-status status">◈ ПРОВЕРКА ДОСТУПА</div>
+            <div class="countdown"></div>
+            <a class="open-link"
+               href="https://fjfjfjfj-svg.github.io/Seecret/"
+               target="_blank" rel="noopener" hidden>
+                ОТКРЫТЬ ГЛАВУ ↗
+            </a>
+        </article>
+
+        <!-- ГЛАВА III -->
+        <article class="chapter" data-release="2026-10-31T12:00:00+05:00">
+            <div class="chapter-number">FRAGMENT № 003</div>
+            <h2>Письмо без подписи</h2>
+            <p class="description">
+                Иногда за расследованием скрывается
+                нечто более личное, чем кажется на первый взгляд.
+            </p>
+            <div class="chapter-status status">◈ ПРОВЕРКА ДОСТУПА</div>
+            <div class="countdown"></div>
+            <a class="open-link"
+               href="https://fjfjfjfj-svg.github.io/-/"
+               target="_blank" rel="noopener" hidden>
+                ОТКРЫТЬ ГЛАВУ ↗
+            </a>
+        </article>
+
+        <!-- ГЛАВА IV -->
+        <article class="chapter" data-release="2026-11-02T18:00:00+05:00">
+            <div class="chapter-number">FRAGMENT № 004</div>
+            <h2>След становится ближе</h2>
+            <p class="description">
+                У каждой загадки есть граница,
+                за которой случайные совпадения
+                начинают складываться в картину.
+            </p>
+            <div class="chapter-status status">◈ ПРОВЕРКА ДОСТУПА</div>
+            <div class="countdown"></div>
+            <a class="open-link"
+               href="https://fjfjfjfj-svg.github.io/..-/"
+               target="_blank" rel="noopener" hidden>
+                ОТКРЫТЬ ГЛАВУ ↗
+            </a>
+        </article>
+
+        <!-- ГЛАВА V -->
+        <article class="chapter" data-release="2026-11-05T18:00:00+05:00">
+            <div class="chapter-number">FINAL FILE · 005</div>
+            <h2>За именем архива</h2>
+            <p class="description">
+                Последний фрагмент.
+                Возможно, теперь всё станет на свои места.
+            </p>
+            <div class="chapter-status status">◈ ПРОВЕРКА ДОСТУПА</div>
+            <div class="countdown"></div>
+            <a class="open-link"
+               href="https://fjfjfjfj-svg.github.io/...-/"
+               target="_blank" rel="noopener" hidden>
+                ОТКРЫТЬ ГЛАВУ ↗
+            </a>
+        </article>
+
+    </section>
+
+    <p class="bottom-note">
+        Не все материалы доступны одновременно.
+        <br>
+        Время открытия указано по времени Казахстана.
+    </p>
+
+    <footer>THE UNKNOWN ARCHIVE · END OF TRANSMISSION</footer>
+</main>
+
+<script>
+// ЗВЁЗДНОЕ НЕБО
+const starField = document.getElementById("stars");
+
+for (let i = 0; i < 150; i++) {
+    const star = document.createElement("span");
+    star.className = "star";
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 100 + "%";
+    star.style.animationDelay = Math.random() * 4 + "s";
+    star.style.animationDuration = (2 + Math.random() * 4) + "s";
+
+    const size = 1 + Math.random() * 2;
+    star.style.width = size + "px";
+    star.style.height = size + "px";
+
+    starField.appendChild(star);
+}
+
+// ПАДАЮЩИЕ ЗВЁЗДЫ
+for (let i = 0; i < 4; i++) {
+    const shooting = document.createElement("span");
+    shooting.className = "shooting-star";
+    shooting.style.left = (35 + Math.random() * 65) + "%";
+    shooting.style.top = (Math.random() * 45) + "%";
+    shooting.style.animationDelay = (i * 2 + Math.random() * 4) + "s";
+    starField.appendChild(shooting);
+}
+
+// ВРЕМЯ ОТКРЫТИЯ ГЛАВ
+function updateChapters() {
+    const now = Date.now();
+
+    document.querySelectorAll(".chapter[data-release]").forEach(chapter => {
+        const releaseTime = new Date(chapter.dataset.release).getTime();
+        const status = chapter.querySelector(".status");
+        const countdown = chapter.querySelector(".countdown");
+        const link = chapter.querySelector(".open-link");
+
+        if (now >= releaseTime) {
+            status.textContent = "● ДОСТУП ОТКРЫТ";
+            status.classList.remove("locked");
+            countdown.textContent = "";
+            link.hidden = false;
+            return;
+        }
+
+        status.textContent = "◈ ДОСТУП ЗАКРЫТ";
+        status.classList.add("locked");
+        link.hidden = true;
+
+        const remaining = releaseTime - now;
+
+        const days = Math.floor(remaining / 86400000);
+        const hours = Math.floor((remaining % 86400000) / 3600000);
+        const minutes = Math.floor((remaining % 3600000) / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+
+        countdown.textContent =
+            "ДО ОТКРЫТИЯ: " +
+            days + " д. " +
+            String(hours).padStart(2, "0") + ":" +
+            String(minutes).padStart(2, "0") + ":" +
+            String(seconds).padStart(2, "0");
+    });
+}
+
+updateChapters();
+setInterval(updateChapters, 1000);
+</script>
+
+</body>
+</html>
